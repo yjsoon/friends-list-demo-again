@@ -18,8 +18,10 @@ class FriendsTableViewController: UITableViewController {
         
         // Check if there's data, if there is, load it, else, load sample
         if let loadedFriends = Friend.loadFromFile() {
+            print("Loading existing friends")
             friends = loadedFriends
         } else {
+            print("Loading sample friends because I have none 😢")
             friends = Friend.loadSampleData()
         }
     }

@@ -13,6 +13,7 @@ class FriendsTableViewController: UITableViewController {
     var friends: [Friend]!
         
     override func viewDidLoad() {
+        
         super.viewDidLoad()
         self.navigationItem.leftBarButtonItem = self.editButtonItem
         

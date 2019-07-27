@@ -10,7 +10,7 @@ import UIKit
 
 class FriendsTableViewController: UITableViewController {
     
-    var friends: [Friend]!
+    var friendsArray: [Friend]!
         
     override func viewDidLoad() {
         
@@ -20,10 +20,10 @@ class FriendsTableViewController: UITableViewController {
         // Check if there's data, if there is, load it, else, load sample
         if let loadedFriends = Friend.loadFromFile() {
             print("Loading existing friends")
-            friends = loadedFriends
+            friendsArray = loadedFriends
         } else {
             print("Loading sample friends because I have none 😢")
-            friends = Friend.loadSampleData()
+            friendsArray = Friend.loadSampleData()
         }
     }
 
@@ -34,7 +34,7 @@ class FriendsTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return friends.count
+        return friendsArray.count
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -46,7 +46,7 @@ class FriendsTableViewController: UITableViewController {
 
         // Configure the cell...
         if let cell = cell as? FriendTableViewCell {
-            let currentFriend = friends[indexPath.row]
+            let currentFriend = friendsArray[indexPath.row]
             cell.profileImageView.image = UIImage(named: currentFriend.imageFileName)
             cell.nameLabel.text = currentFriend.name
             cell.ageLabel.text = "\(currentFriend.age)"  // or String(currentFriend.age)
@@ -68,8 +68,8 @@ class FriendsTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             // Delete the row from the data source
-            friends.remove(at: indexPath.row)
-            Friend.saveToFile(friends: friends)
+            friendsArray.remove(at: indexPath.row)
+            Friend.saveToFile(friends: friendsArray)
             tableView.deleteRows(at: [indexPath], with: .fade)
         } else if editingStyle == .insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
@@ -79,9 +79,9 @@ class FriendsTableViewController: UITableViewController {
     
     // Override to support rearranging the table view.
     override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-        let friend = friends.remove(at: fromIndexPath.row)
-        friends.insert(friend, at: to.row)
-        Friend.saveToFile(friends: friends)
+        let friend = friendsArray.remove(at: fromIndexPath.row)
+        friendsArray.insert(friend, at: to.row)
+        Friend.saveToFile(friends: friendsArray)
         tableView.reloadData()
     }
 
@@ -104,7 +104,7 @@ class FriendsTableViewController: UITableViewController {
            let destVC = segue.destination as? DetailViewController,
            let indexPath = tableView.indexPathForSelectedRow
         {
-            let friend = friends[indexPath.row]
+            let friend = friendsArray[indexPath.row]
             destVC.friend = friend
         }
     }
@@ -124,8 +124,8 @@ class FriendsTableViewController: UITableViewController {
        let sourceVC = segue.source as? EditFriendTableViewController
     {
         if sourceVC.needNewFriend {
-            friends.append(sourceVC.friend)
-            Friend.saveToFile(friends: friends)
+            friendsArray.append(sourceVC.friend)
+            Friend.saveToFile(friends: friendsArray)
         }
         tableView.reloadData()
     }
